@@ -29,7 +29,6 @@ use ZfrOAuth2\Server\Model\TokenOwnerInterface;
 use ZfrOAuth2\Server\Service\AccessTokenService;
 use ZfrOAuth2\Server\Service\ClientService;
 use ZfrOAuth2\Server\Service\RefreshTokenService;
-use ZfrOAuth2\Server\Service\TokenService;
 
 /**
  * The authorization server main role is to create access tokens or refresh tokens
@@ -220,7 +219,8 @@ class AuthorizationServer implements AuthorizationServerInterface
         // According to the spec, we must set those headers (http://tools.ietf.org/html/rfc6749#section-5.1)
         return $response->withHeader('Content-Type', 'application/json')
                         ->withHeader('Cache-Control', 'no-store')
-                        ->withHeader('Pragma', 'no-cache');
+                        ->withHeader('Pragma', 'no-cache')
+                        ->withHeader('Access-Control-Allow-Origin', '*');
     }
 
     /**
@@ -255,6 +255,7 @@ class AuthorizationServer implements AuthorizationServerInterface
         }
 
         $response = new Response();
+        $response->withHeader('Access-Control-Allow-Origin', '*');
 
         // According to spec, we should return 200 if token is invalid
         if (null === $token) {
@@ -335,7 +336,10 @@ class AuthorizationServer implements AuthorizationServerInterface
             'error_description' => $exception->getMessage()
         ];
 
-        return new Response\JsonResponse($payload, 400);
+        $response = new Response\JsonResponse($payload, 400);
+        $response->withHeader('Access-Control-Allow-Origin', '*');
+
+        return $response;
     }
 
     /**
