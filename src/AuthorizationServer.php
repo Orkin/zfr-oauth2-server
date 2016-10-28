@@ -255,7 +255,7 @@ class AuthorizationServer implements AuthorizationServerInterface
         }
 
         $response = new Response();
-        $response->withHeader('Access-Control-Allow-Origin', '*');
+        $response = $response->withHeader('Access-Control-Allow-Origin', '*');
 
         // According to spec, we should return 200 if token is invalid
         if (null === $token) {
@@ -337,7 +337,7 @@ class AuthorizationServer implements AuthorizationServerInterface
         ];
 
         $response = new Response\JsonResponse($payload, 400);
-        $response->withHeader('Access-Control-Allow-Origin', '*');
+        $response = $response->withHeader('Access-Control-Allow-Origin', '*');
 
         return $response;
     }
